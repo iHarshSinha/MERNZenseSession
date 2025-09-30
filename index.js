@@ -27,6 +27,18 @@ app.get("/todos", async (req, res) => {
     res.json(todos);
 });
 
+app.get("/todo/:id", async (req, res) => {
+    console.log("route hit")
+    const { id } = req.params;
+    const todo = await Todo.findById(id);
+    console.log(todo)
+    if (!todo) {
+        return res.status(404).json({ error: "Todo not found" });
+    }
+    let todoJSON = todo.toJSON();
+    return res.json(todoJSON);
+});
+
 app.get("/todos/filter",async (req, res) => {
     const { done } = req.query;
     const todos = await Todo.find(done ? { done: done === 'true' } : {});
